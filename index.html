@@ -1,0 +1,748 @@
+<!DOCTYPE html>
+<html lang="fr" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Plateforme Éditoriale Spirituelle Unifiée</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts: Serif pour les titres et Sans-serif pour la lisibilité -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700&family=Inter:wght@300;400;500;600&family=Lora:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        navy: {
+                            800: '#1e293b',
+                            900: '#0f172a',
+                            950: '#090d16',
+                        },
+                        sand: {
+                            50: '#fdfbf7',
+                            100: '#f7f4ed',
+                            200: '#ece5d8',
+                            300: '#dfd3be',
+                        },
+                        gold: {
+                            500: '#d4af37',
+                            600: '#b89228',
+                        }
+                    },
+                    fontFamily: {
+                        title: ['Cinzel', 'serif'],
+                        body: ['Inter', 'sans-serif'],
+                        serif: ['Lora', 'serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f7f4ed;
+            color: #1e293b;
+        }
+        .title-font {
+            font-family: 'Cinzel', serif;
+        }
+        .article-body-font {
+            font-family: 'Lora', serif;
+        }
+    </style>
+</head>
+<body class="bg-sand-100 min-h-screen flex flex-col justify-between selection:bg-navy-800 selection:text-sand-100">
+
+    <!-- TOP HEADER / NAVBAR -->
+    <header class="sticky top-0 z-40 bg-navy-900 text-sand-100 shadow-md transition-all">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-20">
+                <!-- Logo & Brand Name -->
+                <div class="flex items-center space-x-3 cursor-pointer" onclick="navigateTo('home')">
+                    <div class="w-10 h-10 rounded-full bg-gold-500 flex items-center justify-center text-navy-900 font-bold text-xl shadow-inner">
+                        <i class="fa-solid fa-book-open"></i>
+                    </div>
+                    <div>
+                        <h1 class="title-font font-bold text-lg sm:text-xl tracking-wider text-sand-50">ÉDITIONS SPIRITUELLES</h1>
+                        <p class="text-xs text-sand-300 font-light tracking-widest uppercase">Plateforme Unifiée - 10 Blogs</p>
+                    </div>
+                </div>
+
+                <!-- Desktop Navigation -->
+                <nav class="hidden md:flex space-x-6 lg:space-x-8 font-medium text-sm">
+                    <button onclick="navigateTo('home')" id="nav-home" class="nav-btn text-gold-500 hover:text-gold-500 py-2 border-b-2 border-gold-500 transition-all">Accueil</button>
+                    <button onclick="navigateTo('series')" id="nav-series" class="nav-btn text-sand-300 hover:text-sand-50 py-2 border-b-2 border-transparent transition-all">Thèmes & Séries</button>
+                    <button onclick="navigateTo('archives')" id="nav-archives" class="nav-btn text-sand-300 hover:text-sand-50 py-2 border-b-2 border-transparent transition-all">Trimestres</button>
+                    <button onclick="navigateTo('daily')" id="nav-daily" class="nav-btn text-sand-300 hover:text-sand-50 py-2 border-b-2 border-transparent transition-all">Publication du jour</button>
+                    <button onclick="navigateTo('about')" id="nav-about" class="nav-btn text-sand-300 hover:text-sand-50 py-2 border-b-2 border-transparent transition-all">À propos</button>
+                </nav>
+
+                <!-- Mobile Menu Button -->
+                <div class="md:hidden flex items-center">
+                    <button id="mobile-menu-btn" onclick="toggleMobileMenu()" class="text-sand-200 hover:text-sand-50 focus:outline-none p-2">
+                        <i class="fa-solid fa-bars text-2xl"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Mobile Navigation Menu -->
+        <div id="mobile-menu" class="hidden md:hidden bg-navy-950 border-t border-navy-800 px-4 pt-2 pb-6 space-y-2">
+            <button onclick="navigateTo('home')" class="block w-full text-left px-3 py-2 rounded-md text-base font-medium text-gold-500 bg-navy-900">Accueil</button>
+            <button onclick="navigateTo('series')" class="block w-full text-left px-3 py-2 rounded-md text-base font-medium text-sand-200 hover:bg-navy-800">Thèmes & Séries</button>
+            <button onclick="navigateTo('archives')" class="block w-full text-left px-3 py-2 rounded-md text-base font-medium text-sand-200 hover:bg-navy-800">Trimestres</button>
+            <button onclick="navigateTo('daily')" class="block w-full text-left px-3 py-2 rounded-md text-base font-medium text-sand-200 hover:bg-navy-800">Publication du jour</button>
+            <button onclick="navigateTo('about')" class="block w-full text-left px-3 py-2 rounded-md text-base font-medium text-sand-200 hover:bg-navy-800">À propos</button>
+        </div>
+    </header>
+
+    <!-- MAIN CONTENT AREA -->
+    <main id="main-content" class="flex-grow max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8">
+
+        <!-- SECTION: PAGE D'ACCUEIL -->
+        <div id="view-home" class="space-y-12">
+            
+            <!-- HERO / PUBLICATION DU JOUR -->
+            <section class="bg-gradient-to-r from-navy-900 to-navy-800 rounded-2xl shadow-xl overflow-hidden text-sand-50 border border-navy-800 relative">
+                <div class="absolute right-0 top-0 w-1/3 h-full opacity-10 bg-repeat pointer-events-none hidden lg:block" style="background-image: url('data:image/svg+xml,%3Csvg width=\'20\' height=\'20\' viewBox=\'0 0 20 20\' xmlns=\'http://www.w3.org/2000/svg\'%3E%3Cg fill=\'%23ffffff\' fill-opacity=\'1\' fill-rule=\'evenodd\'%3E%3Ccircle cx=\'3\' cy=\'3\' r=\'3\'/%3E%3C/g%3E%3C/svg%3E');"></div>
+                <div class="p-6 sm:p-10 lg:w-2/3 space-y-4">
+                    <div class="flex flex-wrap items-center gap-3">
+                        <span class="bg-gold-500 text-navy-950 text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wider">
+                            <i class="fa-solid fa-sun mr-1"></i> Publication du Jour
+                        </span>
+                        <span class="text-xs text-sand-300">
+                            <i class="fa-regular fa-calendar mr-1"></i> 2 Novembre 2026
+                        </span>
+                        <span class="bg-navy-950 text-sand-300 text-xs px-3 py-1 rounded-full border border-navy-800">
+                            Trimestre 4 - 2026
+                        </span>
+                    </div>
+
+                    <h2 class="title-font text-2xl sm:text-3xl lg:text-4xl font-bold text-sand-50 leading-tight">
+                        L'Évangile de Marc : Découvrir la puissance de la foi quotidienne
+                    </h2>
+
+                    <p class="text-sand-200 text-sm sm:text-base line-clamp-3 font-light">
+                        Dans ce passage clé, l'auteur nous réinvite à examiner comment la foi active transforme les relations et apporte la lumière divine au cœur des épreuves les plus intenses de l'existence...
+                    </p>
+
+                    <div class="pt-4 flex flex-wrap items-center gap-4">
+                        <button onclick="openArticleModal(1)" class="bg-gold-500 hover:bg-gold-600 text-navy-950 font-semibold px-6 py-3 rounded-lg shadow-md transition-all flex items-center space-x-2">
+                            <span>Lire l'article complet</span>
+                            <i class="fa-solid fa-arrow-right text-xs"></i>
+                        </button>
+                        <span class="text-xs text-sand-300 italic">Issu du blog : Évangile de Marc (T3 2024)</span>
+                    </div>
+                </div>
+            </section>
+
+            <!-- STATISTIQUES DES 10 BLOGS UNIFIÉS -->
+            <section class="grid grid-cols-2 sm:grid-cols-4 gap-4 bg-white p-6 rounded-xl shadow-sm border border-sand-200 text-center">
+                <div class="p-3">
+                    <p class="text-2xl sm:text-3xl font-bold text-navy-900 title-font">10</p>
+                    <p class="text-xs text-slate-500 uppercase tracking-wider mt-1">Blogs Rassemblés</p>
+                </div>
+                <div class="p-3 border-l border-sand-200">
+                    <p class="text-2xl sm:text-3xl font-bold text-navy-900 title-font">4</p>
+                    <p class="text-xs text-slate-500 uppercase tracking-wider mt-1">Grands Pôles</p>
+                </div>
+                <div class="p-3 sm:border-l border-sand-200">
+                    <p class="text-2xl sm:text-3xl font-bold text-navy-900 title-font">365+</p>
+                    <p class="text-xs text-slate-500 uppercase tracking-wider mt-1">Articles Éditoriaux</p>
+                </div>
+                <div class="p-3 border-l border-sand-200">
+                    <p class="text-2xl sm:text-3xl font-bold text-navy-900 title-font">4</p>
+                    <p class="text-xs text-slate-500 uppercase tracking-wider mt-1">Trimestres/An</p>
+                </div>
+            </section>
+
+            <!-- SECTION : LES 4 GRANDS PÔLES THÉMATIQUES -->
+            <section class="space-y-6">
+                <div class="flex flex-col sm:flex-row justify-between items-start sm:items-end border-b border-sand-300 pb-4">
+                    <div>
+                        <h3 class="title-font text-2xl font-bold text-navy-900">Les 4 Grands Pôles Éditoriaux</h3>
+                        <p class="text-sm text-slate-600 mt-1">Explorez les contenus selon vos centres d'étude spirituelle</p>
+                    </div>
+                    <button onclick="navigateTo('series')" class="mt-3 sm:mt-0 text-sm font-semibold text-navy-900 hover:text-gold-600 flex items-center space-x-1">
+                        <span>Voir l'ensemble des séries</span>
+                        <i class="fa-solid fa-chevron-right text-xs"></i>
+                    </button>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                    
+                    <!-- Pôle 1 -->
+                    <div class="bg-white rounded-xl shadow-sm border border-sand-200 hover:shadow-md transition-all p-6 flex flex-col justify-between">
+                        <div>
+                            <div class="w-12 h-12 rounded-lg bg-amber-100 text-amber-800 flex items-center justify-center text-xl mb-4">
+                                <i class="fa-solid fa-scroll"></i>
+                            </div>
+                            <h4 class="title-font font-bold text-lg text-navy-900 mb-2">Ancien Testament</h4>
+                            <p class="text-xs text-slate-600 mb-4">Études de récits fondamentaux, conquêtes et fondements de la foi.</p>
+                            <ul class="text-xs space-y-2 text-slate-700 font-medium border-t border-sand-100 pt-3">
+                                <li class="flex items-center space-x-2">
+                                    <i class="fa-solid fa-check text-gold-500 text-xxs"></i>
+                                    <span>Leçons sur le livre de Josué</span>
+                                </li>
+                                <li class="flex items-center space-x-2">
+                                    <i class="fa-solid fa-check text-gold-500 text-xxs"></i>
+                                    <span>L'Exode vers la terre promise</span>
+                                </li>
+                            </ul>
+                        </div>
+                        <button onclick="filterPole('Ancien Testament')" class="mt-6 w-full text-center py-2 bg-sand-100 hover:bg-sand-200 text-navy-900 rounded-lg text-xs font-semibold transition-all">
+                            Explorer le Pôle
+                        </button>
+                    </div>
+
+                    <!-- Pôle 2 -->
+                    <div class="bg-white rounded-xl shadow-sm border border-sand-200 hover:shadow-md transition-all p-6 flex flex-col justify-between">
+                        <div>
+                            <div class="w-12 h-12 rounded-lg bg-blue-100 text-blue-800 flex items-center justify-center text-xl mb-4">
+                                <i class="fa-solid fa-cross"></i>
+                            </div>
+                            <h4 class="title-font font-bold text-lg text-navy-900 mb-2">Nouveau Testament</h4>
+                            <p class="text-xs text-slate-600 mb-4">Évangiles et épîtres pour l'enseignement des communautés.</p>
+                            <ul class="text-xs space-y-2 text-slate-700 font-medium border-t border-sand-100 pt-3">
+                                <li class="flex items-center space-x-2">
+                                    <i class="fa-solid fa-check text-gold-500 text-xxs"></i>
+                                    <span>Évangile de Marc (2024 T3)</span>
+                                </li>
+                                <li class="flex items-center space-x-2">
+                                    <i class="fa-solid fa-check text-gold-500 text-xxs"></i>
+                                    <span>1 et 2 Épîtres de Paul aux Corinthiens</span>
+                                </li>
+                            </ul>
+                        </div>
+                        <button onclick="filterPole('Nouveau Testament')" class="mt-6 w-full text-center py-2 bg-sand-100 hover:bg-sand-200 text-navy-900 rounded-lg text-xs font-semibold transition-all">
+                            Explorer le Pôle
+                        </button>
+                    </div>
+
+                    <!-- Pôle 3 -->
+                    <div class="bg-white rounded-xl shadow-sm border border-sand-200 hover:shadow-md transition-all p-6 flex flex-col justify-between">
+                        <div>
+                            <div class="w-12 h-12 rounded-lg bg-emerald-100 text-emerald-800 flex items-center justify-center text-xl mb-4">
+                                <i class="fa-solid fa-heart-pulse"></i>
+                            </div>
+                            <h4 class="title-font font-bold text-lg text-navy-900 mb-2">Vie & Théologie</h4>
+                            <p class="text-xs text-slate-600 mb-4">Réflexions théologiques sur l'amour, la justice et la croissance spirituelle.</p>
+                            <ul class="text-xs space-y-2 text-slate-700 font-medium border-t border-sand-100 pt-3">
+                                <li class="flex items-center space-x-2">
+                                    <i class="fa-solid fa-check text-gold-500 text-xxs"></i>
+                                    <span>Thématiques de Jean</span>
+                                </li>
+                                <li class="flex items-center space-x-2">
+                                    <i class="fa-solid fa-check text-gold-500 text-xxs"></i>
+                                    <span>Amour et justice de Dieu</span>
+                                </li>
+                                <li class="flex items-center space-x-2">
+                                    <i class="fa-solid fa-check text-gold-500 text-xxs"></i>
+                                    <span>Grandir en relation avec Dieu</span>
+                                </li>
+                            </ul>
+                        </div>
+                        <button onclick="filterPole('Vie & Théologie')" class="mt-6 w-full text-center py-2 bg-sand-100 hover:bg-sand-200 text-navy-900 rounded-lg text-xs font-semibold transition-all">
+                            Explorer le Pôle
+                        </button>
+                    </div>
+
+                    <!-- Pôle 4 -->
+                    <div class="bg-white rounded-xl shadow-sm border border-sand-200 hover:shadow-md transition-all p-6 flex flex-col justify-between">
+                        <div>
+                            <div class="w-12 h-12 rounded-lg bg-purple-100 text-purple-800 flex items-center justify-center text-xl mb-4">
+                                <i class="fa-solid fa-feather-pointed"></i>
+                            </div>
+                            <h4 class="title-font font-bold text-lg text-navy-900 mb-2">Symbolisme & Unité</h4>
+                            <p class="text-xs text-slate-600 mb-4">Explication des métaphores spirituelles et de la dimension cosmique.</p>
+                            <ul class="text-xs space-y-2 text-slate-700 font-medium border-t border-sand-100 pt-3">
+                                <li class="flex items-center space-x-2">
+                                    <i class="fa-solid fa-check text-gold-500 text-xxs"></i>
+                                    <span>Allusions, images & symboles</span>
+                                </li>
+                                <li class="flex items-center space-x-2">
+                                    <i class="fa-solid fa-check text-gold-500 text-xxs"></i>
+                                    <span>Unir ciel et terre</span>
+                                </li>
+                            </ul>
+                        </div>
+                        <button onclick="filterPole('Symbolisme & Unité')" class="mt-6 w-full text-center py-2 bg-sand-100 hover:bg-sand-200 text-navy-900 rounded-lg text-xs font-semibold transition-all">
+                            Explorer le Pôle
+                        </button>
+                    </div>
+
+                </div>
+            </section>
+
+            <!-- SECTION : DERNIÈRES PUBLICATIONS -->
+            <section class="space-y-6">
+                <h3 class="title-font text-2xl font-bold text-navy-900 border-b border-sand-300 pb-4">
+                    Récemment Publiés sur la Plateforme
+                </h3>
+
+                <div id="latest-articles-grid" class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <!-- Les cartes sont générées par JavaScript -->
+                </div>
+            </section>
+
+        </div>
+
+        <!-- SECTION: THÈMES & SÉRIES -->
+        <div id="view-series" class="hidden space-y-8">
+            <div class="bg-white p-6 rounded-xl border border-sand-200 shadow-sm space-y-4">
+                <h2 class="title-font text-3xl font-bold text-navy-900">Repertoire des 10 Blogs & Séries Éditoriales</h2>
+                <p class="text-sm text-slate-600">Sélectionnez une série pour consulter les publications et archives associées.</p>
+                
+                <!-- Search and Filter Bar -->
+                <div class="flex flex-col sm:flex-row gap-4 pt-2">
+                    <div class="relative flex-grow">
+                        <i class="fa-solid fa-magnifying-glass absolute left-3 top-3.5 text-slate-400"></i>
+                        <input type="text" id="series-search" oninput="renderSeriesList()" placeholder="Rechercher une série ou un mot-clé..." class="w-full pl-10 pr-4 py-2.5 rounded-lg border border-sand-300 focus:outline-none focus:ring-2 focus:ring-navy-900 text-sm">
+                    </div>
+                    <select id="pole-filter" onchange="renderSeriesList()" class="px-4 py-2.5 rounded-lg border border-sand-300 focus:outline-none focus:ring-2 focus:ring-navy-900 text-sm bg-white">
+                        <option value="all">Tous les Pôles</option>
+                        <option value="Ancien Testament">Ancien Testament</option>
+                        <option value="Nouveau Testament">Nouveau Testament</option>
+                        <option value="Vie & Théologie">Vie & Théologie</option>
+                        <option value="Symbolisme & Unité">Symbolisme & Unité</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- Full Series List -->
+            <div id="series-container" class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <!-- Injection dynamique JS -->
+            </div>
+        </div>
+
+        <!-- SECTION: TRIMESTRES / ARCHIVES -->
+        <div id="view-archives" class="hidden space-y-8">
+            <div class="bg-navy-900 text-sand-50 p-8 rounded-xl shadow-md space-y-4">
+                <h2 class="title-font text-3xl font-bold">Archives de Publication par Trimestre</h2>
+                <p class="text-sand-300 text-sm">Chaque étude et série est organisée chronologiquement par trimestre calendaire pour faciliter un accompagnement spirituel régulier.</p>
+                
+                <!-- Trimestres Buttons -->
+                <div class="flex flex-wrap gap-3 pt-2">
+                    <button onclick="filterQuarter('all')" class="q-btn bg-gold-500 text-navy-950 px-4 py-2 rounded-lg text-sm font-semibold">Tous les trimestres</button>
+                    <button onclick="filterQuarter('T4-2026')" class="q-btn bg-navy-800 hover:bg-navy-700 text-sand-200 px-4 py-2 rounded-lg text-sm font-semibold border border-navy-700">Trimestre 4 (2026)</button>
+                    <button onclick="filterQuarter('T3-2026')" class="q-btn bg-navy-800 hover:bg-navy-700 text-sand-200 px-4 py-2 rounded-lg text-sm font-semibold border border-navy-700">Trimestre 3 (2026)</button>
+                    <button onclick="filterQuarter('T2-2026')" class="q-btn bg-navy-800 hover:bg-navy-700 text-sand-200 px-4 py-2 rounded-lg text-sm font-semibold border border-navy-700">Trimestre 2 (2026)</button>
+                    <button onclick="filterQuarter('T1-2026')" class="q-btn bg-navy-800 hover:bg-navy-700 text-sand-200 px-4 py-2 rounded-lg text-sm font-semibold border border-navy-700">Trimestre 1 (2026)</button>
+                    <button onclick="filterQuarter('2025')" class="q-btn bg-navy-800 hover:bg-navy-700 text-sand-200 px-4 py-2 rounded-lg text-sm font-semibold border border-navy-700">Archives 2025</button>
+                </div>
+            </div>
+
+            <!-- Results grid for quarter filter -->
+            <div id="archives-articles-grid" class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <!-- Injection dynamique JS -->
+            </div>
+        </div>
+
+        <!-- SECTION: PUBLICATION DU JOUR -->
+        <div id="view-daily" class="hidden space-y-8">
+            <div class="bg-white p-8 rounded-xl border border-sand-200 shadow-sm max-w-4xl mx-auto space-y-6">
+                <div class="border-b border-sand-200 pb-4 flex justify-between items-center">
+                    <div>
+                        <span class="bg-gold-500 text-navy-950 text-xs font-bold px-3 py-1 rounded-full uppercase">Publication du Jour</span>
+                        <h2 class="title-font text-3xl font-bold text-navy-900 mt-2">L'Évangile de Marc : Découvrir la puissance de la foi quotidienne</h2>
+                        <p class="text-xs text-slate-500 mt-1">Publié le 2 Novembre 2026 • Série : Évangile de Marc (T3 2024)</p>
+                    </div>
+                </div>
+
+                <div class="article-body-font text-slate-800 leading-relaxed text-lg space-y-4">
+                    <p>Dans la marche quotidienne de la foi, la simplicité du message évangélique se confronte souvent à la complexité de nos réalités contemporaines. L'Évangile de Marc offre une perspective dynamique, courte et directe sur la portée de l'engagement personnel.</p>
+                    
+                    <p>À travers ce chapitre spécifique, nous observons trois principes fondamentaux qui résonnent particulièrement aujourd'hui :</p>
+                    
+                    <ul class="list-disc pl-6 space-y-2 text-base font-sans text-slate-700">
+                        <li><strong>L'écoute attentive :</strong> Prendre le temps du silence au milieu du bruit du monde.</li>
+                        <li><strong>L'action constante :</strong> Traduire ses convictions en gestes concrets d'amour et d'accueil.</li>
+                        <li><strong>La persévérance :</strong> Rester ancré lors des périodes d'incertitude spirituelle.</li>
+                    </ul>
+
+                    <p>Que cette méditation du jour vous encourage à poursuivre votre réflexion personnelle et à partager ces valeurs dans votre entourage.</p>
+                </div>
+
+                <!-- Integration Note Blogger RSS -->
+                <div class="bg-sand-50 p-4 rounded-lg border border-sand-300 text-xs text-slate-600 flex items-start space-x-3">
+                    <i class="fa-solid fa-rss text-gold-600 text-lg mt-0.5"></i>
+                    <div>
+                        <p class="font-semibold text-navy-900">Origine du contenu :</p>
+                        <p>Cet article provient du blog partenaire <a href="https://evangiledemarc2024t3.blogspot.com/" target="_blank" class="text-navy-900 underline font-medium">evangiledemarc2024t3.blogspot.com</a> et a été synchronisé via le flux RSS unifié.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- SECTION: À PROPOS -->
+        <div id="view-about" class="hidden space-y-8">
+            <div class="bg-white p-8 rounded-xl border border-sand-200 shadow-sm max-w-4xl mx-auto space-y-6">
+                <h2 class="title-font text-3xl font-bold text-navy-900 border-b border-sand-200 pb-4">À propos de la Plateforme Éditoriale Unifiée</h2>
+                
+                <div class="space-y-4 text-slate-700 leading-relaxed">
+                    <p>Bienvenue sur la plateforme centrale qui rassemble, organise et pérennise le travail publié sur dix blogs spirituels et théologiques distincts.</p>
+                    
+                    <h3 class="title-font font-bold text-xl text-navy-900 pt-2">Notre Vision</h3>
+                    <p>Plutôt que de disperser les méditations et études bibliques sur plusieurs sites autonomes, cette plateforme offre un espace de lecture fluide, harmonieux et facilement consultable sur tous les supports (ordinateurs, tablettes, smartphones).</p>
+
+                    <h3 class="title-font font-bold text-xl text-navy-900 pt-2">Les 10 Blogs Regroupés</h3>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-2 text-xs">
+                        <a href="https://thematiquesdejean.blogspot.com/" target="_blank" class="p-3 bg-sand-50 rounded border border-sand-200 hover:bg-sand-100 flex items-center justify-between">
+                            <span>1. Thématiques de Jean</span>
+                            <i class="fa-solid fa-arrow-up-right-from-square text-slate-400"></i>
+                        </a>
+                        <a href="https://thematiquesdejean1.blogspot.com/" target="_blank" class="p-3 bg-sand-50 rounded border border-sand-200 hover:bg-sand-100 flex items-center justify-between">
+                            <span>2. Thématiques de Jean (Suite)</span>
+                            <i class="fa-solid fa-arrow-up-right-from-square text-slate-400"></i>
+                        </a>
+                        <a href="https://lessonsfoilivrejosue.blogspot.com/" target="_blank" class="p-3 bg-sand-50 rounded border border-sand-200 hover:bg-sand-100 flex items-center justify-between">
+                            <span>3. Leçons sur Josué</span>
+                            <i class="fa-solid fa-arrow-up-right-from-square text-slate-400"></i>
+                        </a>
+                        <a href="https://evangiledemarc2024t3.blogspot.com/" target="_blank" class="p-3 bg-sand-50 rounded border border-sand-200 hover:bg-sand-100 flex items-center justify-between">
+                            <span>4. Évangile de Marc (2024 T3)</span>
+                            <i class="fa-solid fa-arrow-up-right-from-square text-slate-400"></i>
+                        </a>
+                        <a href="https://amour-et-justice-de-dieu.blogspot.com/" target="_blank" class="p-3 bg-sand-50 rounded border border-sand-200 hover:bg-sand-100 flex items-center justify-between">
+                            <span>5. Amour et Justice de Dieu</span>
+                            <i class="fa-solid fa-arrow-up-right-from-square text-slate-400"></i>
+                        </a>
+                        <a href="https://exodeverslaterrepromise.blogspot.com/" target="_blank" class="p-3 bg-sand-50 rounded border border-sand-200 hover:bg-sand-100 flex items-center justify-between">
+                            <span>6. Exode vers la Terre Promise</span>
+                            <i class="fa-solid fa-arrow-up-right-from-square text-slate-400"></i>
+                        </a>
+                        <a href="https://allusionsimagessymboles.blogspot.com/" target="_blank" class="p-3 bg-sand-50 rounded border border-sand-200 hover:bg-sand-100 flex items-center justify-between">
+                            <span>7. Allusions, Images & Symboles</span>
+                            <i class="fa-solid fa-arrow-up-right-from-square text-slate-400"></i>
+                        </a>
+                        <a href="https://unircielterre.blogspot.com/" target="_blank" class="p-3 bg-sand-50 rounded border border-sand-200 hover:bg-sand-100 flex items-center justify-between">
+                            <span>8. Unir Ciel et Terre</span>
+                            <i class="fa-solid fa-arrow-up-right-from-square text-slate-400"></i>
+                        </a>
+                        <a href="https://grandirrelationavecdieu.blogspot.com/" target="_blank" class="p-3 bg-sand-50 rounded border border-sand-200 hover:bg-sand-100 flex items-center justify-between">
+                            <span>9. Grandir en relation avec Dieu</span>
+                            <i class="fa-solid fa-arrow-up-right-from-square text-slate-400"></i>
+                        </a>
+                        <a href="https://1et2epitresdepaul2corinthe.blogspot.com/" target="_blank" class="p-3 bg-sand-50 rounded border border-sand-200 hover:bg-sand-100 flex items-center justify-between">
+                            <span>10. Épîtres aux Corinthiens</span>
+                            <i class="fa-solid fa-arrow-up-right-from-square text-slate-400"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </main>
+
+    <!-- MODAL LECTURE DE L'ARTICLE -->
+    <div id="article-modal" class="fixed inset-0 z-50 hidden bg-navy-950/80 backdrop-blur-sm flex items-center justify-center p-4 sm:p-6 overflow-y-auto">
+        <div class="bg-white rounded-2xl max-w-3xl w-full max-h-[90vh] overflow-y-auto shadow-2xl border border-sand-300 relative flex flex-col justify-between">
+            
+            <!-- Modal Header -->
+            <div class="p-6 border-b border-sand-200 flex justify-between items-start sticky top-0 bg-white z-10">
+                <div>
+                    <span id="modal-badge" class="bg-gold-500 text-navy-950 text-xs font-bold px-3 py-1 rounded-full uppercase">Série</span>
+                    <h3 id="modal-title" class="title-font text-2xl font-bold text-navy-900 mt-2">Titre de l'article</h3>
+                    <p id="modal-meta" class="text-xs text-slate-500 mt-1">Date • Blog d'origine</p>
+                </div>
+                <button onclick="closeArticleModal()" class="text-slate-400 hover:text-navy-900 text-2xl p-2 focus:outline-none">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+
+            <!-- Modal Content -->
+            <div id="modal-content" class="p-6 sm:p-8 article-body-font text-slate-800 text-lg leading-relaxed space-y-4">
+                <!-- Injection dynamique -->
+            </div>
+
+            <!-- Modal Footer Navigation (Précédent / Suivant) -->
+            <div class="p-6 border-t border-sand-200 bg-sand-50 flex justify-between items-center sticky bottom-0 z-10">
+                <button id="prev-article-btn" onclick="navigateArticle(-1)" class="text-xs font-semibold text-navy-900 hover:text-gold-600 flex items-center space-x-2">
+                    <i class="fa-solid fa-arrow-left"></i>
+                    <span>Article Précédent</span>
+                </button>
+                <span class="text-xs text-slate-400 font-mono">Lecture Éditoriale</span>
+                <button id="next-article-btn" onclick="navigateArticle(1)" class="text-xs font-semibold text-navy-900 hover:text-gold-600 flex items-center space-x-2">
+                    <span>Article Suivant</span>
+                    <i class="fa-solid fa-arrow-right"></i>
+                </button>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- FOOTER -->
+    <footer class="bg-navy-950 text-sand-200 py-12 border-t border-navy-800">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-8">
+            <div class="flex flex-col md:flex-row justify-between items-center gap-6">
+                <div class="flex items-center space-x-3">
+                    <div class="w-8 h-8 rounded-full bg-gold-500 flex items-center justify-center text-navy-900 font-bold">
+                        <i class="fa-solid fa-book-open text-xs"></i>
+                    </div>
+                    <span class="title-font font-bold text-sand-50 tracking-wider">PLATEFORME ÉDITORIALE SPIRITUELLE</span>
+                </div>
+                <p class="text-xs text-sand-300 text-center">Unification & Archiving of 10 Spiritual Blogger Sites © 2026</p>
+                <div class="flex space-x-4 text-sand-300">
+                    <a href="#" class="hover:text-gold-500 text-lg"><i class="fa-brands fa-github"></i></a>
+                    <a href="#" class="hover:text-gold-500 text-lg"><i class="fa-solid fa-rss"></i></a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- JAVASCRIPT LOGIC & DATA -->
+    <script>
+        // DONNÉES SIMULÉES ET STRUCTURÉES DES 10 BLOGS
+        const articles = [
+            {
+                id: 1,
+                title: "L'Évangile de Marc : Découvrir la puissance de la foi quotidienne",
+                pole: "Nouveau Testament",
+                series: "Évangile de Marc",
+                blogUrl: "https://evangiledemarc2024t3.blogspot.com/",
+                quarter: "T4-2026",
+                date: "02 Novembre 2026",
+                summary: "Dans ce passage clé, l'auteur nous réinvite à examiner comment la foi active transforme les relations et apporte la lumière divine au cœur des épreuves.",
+                content: "<p>L'Évangile selon Marc offre une vision directe et vivante du cheminement spirituel. Dans cet enseignement, l'importance de l'écoute attentive est mise au premier plan.</p><p>Lorsque nous traversons des périodes de doutes ou de fatigue, la méditation quotidienne sur ces écrits permet de retrouver un socle solide de paix et d'espérance.</p>"
+            },
+            {
+                id: 2,
+                title: "Traverser la mer Rouge : Confiance et liberté dans le livre de l'Exode",
+                pole: "Ancien Testament",
+                series: "Exode vers la terre promise",
+                blogUrl: "https://exodeverslaterrepromise.blogspot.com/",
+                quarter: "T3-2026",
+                date: "28 Octobre 2026",
+                summary: "Le récit du passage de l'Exode symbolise le saut de la servitude vers la liberté spirituelle sous la conduite divine.",
+                content: "<p>Le récit de l'Exode n'est pas uniquement un événement historique d'envergure ; c'est aussi une métaphore vivante pour toute vie humaine cherchant à se libérer des entraves du passé.</p><p>Faire confiance face à l'inconnu est le premier pas vers la promesse d'un renouveau accompli.</p>"
+            },
+            {
+                id: 3,
+                title: "La vision d'unité dans l'Épître aux Corinthiens",
+                pole: "Nouveau Testament",
+                series: "1 et 2 Épîtres de Paul aux Corinthiens",
+                blogUrl: "https://1et2epitresdepaul2corinthe.blogspot.com/",
+                quarter: "T3-2026",
+                date: "15 Octobre 2026",
+                summary: "Paul s'adresse aux communautés pour rappeler l'importance de l'amour et de l'harmonie mutuelle malgré les divergences d'opinions.",
+                content: "<p>Dans les lettres de Paul aux Corinthiens, le concept de corps uni prend tout son sens. Chaque membre possède une vocation propre, mais tous travaillent au bien commun.</p><p>Cette réflexion nous invite à pratiquer la bienveillance active dans nos lieux de vie et d'échange.</p>"
+            },
+            {
+                id: 4,
+                title: "Josué et la conquête de la foi : Leçons de courage",
+                pole: "Ancien Testament",
+                series: "Leçons sur le livre de Josué",
+                blogUrl: "https://lessonsfoilivrejosue.blogspot.com/",
+                quarter: "T2-2026",
+                date: "05 Septembre 2026",
+                summary: "Analyser le leadership de Josué à travers les épreuves et l'importance de l'obéissance confiante.",
+                content: "<p>Prendre la suite de Moïse demandait une force intérieure hors du commun. Le livre de Josué enseigne que le véritable courage découle de la méditation constante de la loi de grâce.</p>"
+            },
+            {
+                id: 5,
+                title: "Comprendre l'Amour et la Justice de Dieu",
+                pole: "Vie & Théologie",
+                series: "Amour et justice de Dieu",
+                blogUrl: "https://amour-et-justice-de-dieu.blogspot.com/",
+                quarter: "T2-2026",
+                date: "20 Août 2026",
+                summary: "Comment l'Amour divin et la Justice s'articulent sans jamais se contredire dans la pensée spirituelle.",
+                content: "<p>Loin d'être opposées, la justice et la miséricorde se rejoignent pour restaurer la dignité de chaque individu.</p>"
+            },
+            {
+                id: 6,
+                title: "Les grands symboles de l'Évangile de Jean",
+                pole: "Symbolisme & Unité",
+                series: "Allusions, images et symboles",
+                blogUrl: "https://allusionsimagessymboles.blogspot.com/",
+                quarter: "T1-2026",
+                date: "12 Avril 2026",
+                summary: "La lumière, l'eau vive et le pain : une exploration poétique et théologique des images johanniques.",
+                content: "<p>Le texte de Jean regorge de métaphores visuelles profondes. Comprendre ces images permet d'enrichir considérablement notre lecture quotidienne.</p>"
+            }
+        ];
+
+        const seriesList = [
+            { name: "Leçons sur le livre de Josué", pole: "Ancien Testament", blog: "lessonsfoilivrejosue.blogspot.com", url: "https://lessonsfoilivrejosue.blogspot.com/" },
+            { name: "Exode vers la terre promise", pole: "Ancien Testament", blog: "exodeverslaterrepromise.blogspot.com", url: "https://exodeverslaterrepromise.blogspot.com/" },
+            { name: "Évangile de Marc (2024 T3)", pole: "Nouveau Testament", blog: "evangiledemarc2024t3.blogspot.com", url: "https://evangiledemarc2024t3.blogspot.com/" },
+            { name: "1 et 2 Épîtres aux Corinthiens", pole: "Nouveau Testament", blog: "1et2epitresdepaul2corinthe.blogspot.com", url: "https://1et2epitresdepaul2corinthe.blogspot.com/" },
+            { name: "Thématiques de Jean (Partie 1)", pole: "Vie & Théologie", blog: "thematiquesdejean.blogspot.com", url: "https://thematiquesdejean.blogspot.com/" },
+            { name: "Thématiques de Jean (Partie 2)", pole: "Vie & Théologie", blog: "thematiquesdejean1.blogspot.com", url: "https://thematiquesdejean1.blogspot.com/" },
+            { name: "Amour et justice de Dieu", pole: "Vie & Théologie", blog: "amour-et-justice-de-dieu.blogspot.com", url: "https://amour-et-justice-de-dieu.blogspot.com/" },
+            { name: "Grandir en relation avec Dieu", pole: "Vie & Théologie", blog: "grandirrelationavecdieu.blogspot.com", url: "https://grandirrelationavecdieu.blogspot.com/" },
+            { name: "Allusions, images & symboles", pole: "Symbolisme & Unité", blog: "allusionsimagessymboles.blogspot.com", url: "https://allusionsimagessymboles.blogspot.com/" },
+            { name: "Unir ciel et terre", pole: "Symbolisme & Unité", blog: "unircielterre.blogspot.com", url: "https://unircielterre.blogspot.com/" }
+        ];
+
+        let currentArticleIndex = 0;
+
+        // NAVIGATION ENTRE VUES
+        function navigateTo(viewName) {
+            // Cacher toutes les vues
+            document.querySelectorAll('#main-content > div').forEach(div => div.classList.add('hidden'));
+            
+            // Afficher la vue demandée
+            const selectedView = document.getElementById(`view-${viewName}`);
+            if (selectedView) {
+                selectedView.classList.remove('hidden');
+            }
+
+            // Réinitialiser les boutons de nav desktop
+            document.querySelectorAll('.nav-btn').forEach(btn => {
+                btn.classList.remove('text-gold-500', 'border-gold-500');
+                btn.classList.add('text-sand-300', 'border-transparent');
+            });
+
+            // Activer le bouton de nav courant
+            const activeBtn = document.getElementById(`nav-${viewName}`);
+            if (activeBtn) {
+                activeBtn.classList.add('text-gold-500', 'border-gold-500');
+                activeBtn.classList.remove('text-sand-300', 'border-transparent');
+            }
+
+            // Fermer le menu mobile si ouvert
+            document.getElementById('mobile-menu').classList.add('hidden');
+
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function toggleMobileMenu() {
+            const menu = document.getElementById('mobile-menu');
+            menu.classList.toggle('hidden');
+        }
+
+        // RENDU DES ARTICLES SUR LA PAGE D'ACCUEIL
+        function renderLatestArticles() {
+            const grid = document.getElementById('latest-articles-grid');
+            grid.innerHTML = articles.map(art => `
+                <div class="bg-white rounded-xl shadow-sm border border-sand-200 hover:shadow-md transition-all p-6 flex flex-col justify-between">
+                    <div class="space-y-3">
+                        <div class="flex justify-between items-center text-xs">
+                            <span class="bg-sand-200 text-navy-900 px-2.5 py-0.5 rounded-full font-semibold">${art.pole}</span>
+                            <span class="text-slate-400 font-mono">${art.quarter}</span>
+                        </div>
+                        <h4 class="title-font font-bold text-lg text-navy-900 leading-snug cursor-pointer hover:text-gold-600" onclick="openArticleModal(${art.id})">
+                            ${art.title}
+                        </h4>
+                        <p class="text-xs text-slate-600 line-clamp-3">${art.summary}</p>
+                    </div>
+                    <div class="pt-4 border-t border-sand-100 flex justify-between items-center text-xs mt-4">
+                        <span class="text-slate-400 italic">${art.date}</span>
+                        <button onclick="openArticleModal(${art.id})" class="font-semibold text-navy-900 hover:text-gold-600">
+                            Lire <i class="fa-solid fa-chevron-right text-xxs"></i>
+                        </button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // RENDU DE LA LISTE DES SÉRIES ET RECHERCHE
+        function renderSeriesList() {
+            const searchVal = document.getElementById('series-search')?.value.toLowerCase() || '';
+            const poleVal = document.getElementById('pole-filter')?.value || 'all';
+            const container = document.getElementById('series-container');
+
+            const filtered = seriesList.filter(s => {
+                const matchesSearch = s.name.toLowerCase().includes(searchVal) || s.blog.toLowerCase().includes(searchVal);
+                const matchesPole = poleVal === 'all' || s.pole === poleVal;
+                return matchesSearch && matchesPole;
+            });
+
+            container.innerHTML = filtered.map(s => `
+                <div class="bg-white p-6 rounded-xl border border-sand-200 shadow-sm flex flex-col justify-between">
+                    <div>
+                        <span class="text-xs bg-navy-900 text-sand-100 px-2.5 py-1 rounded-full font-semibold">${s.pole}</span>
+                        <h4 class="title-font font-bold text-xl text-navy-900 mt-3">${s.name}</h4>
+                        <p class="text-xs text-slate-500 mt-1 font-mono">${s.blog}</p>
+                    </div>
+                    <div class="pt-4 mt-4 border-t border-sand-100 flex justify-between items-center">
+                        <a href="${s.url}" target="_blank" class="text-xs text-slate-600 hover:text-navy-900 flex items-center space-x-1">
+                            <span>Blog Original</span>
+                            <i class="fa-solid fa-arrow-up-right-from-square text-xxs"></i>
+                        </a>
+                        <button onclick="navigateTo('archives')" class="text-xs bg-sand-200 hover:bg-sand-300 text-navy-900 px-3 py-1.5 rounded font-semibold transition-all">
+                            Voir les Trimestres
+                        </button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // FILTRE ET RENDU DES TRIMESTRES
+        function renderArchivesArticles(quarterFilter = 'all') {
+            const grid = document.getElementById('archives-articles-grid');
+            const filtered = articles.filter(a => quarterFilter === 'all' || a.quarter === quarterFilter || (quarterFilter === '2025' && a.quarter.includes('2025')));
+
+            if(filtered.length === 0) {
+                grid.innerHTML = `<div class="col-span-3 text-center py-12 text-slate-500">Aucun article trouvé pour ce trimestre.</div>`;
+                return;
+            }
+
+            grid.innerHTML = filtered.map(art => `
+                <div class="bg-white rounded-xl shadow-sm border border-sand-200 p-6 flex flex-col justify-between">
+                    <div class="space-y-3">
+                        <span class="bg-navy-950 text-sand-50 text-xs px-2.5 py-1 rounded-full font-mono">${art.quarter}</span>
+                        <h4 class="title-font font-bold text-lg text-navy-900 cursor-pointer hover:text-gold-600" onclick="openArticleModal(${art.id})">${art.title}</h4>
+                        <p class="text-xs text-slate-600">${art.summary}</p>
+                    </div>
+                    <button onclick="openArticleModal(${art.id})" class="mt-4 w-full py-2 bg-sand-100 hover:bg-sand-200 text-navy-900 text-xs font-bold rounded transition-all">
+                        Lire la publication
+                    </button>
+                </div>
+            `).join('');
+        }
+
+        function filterQuarter(q) {
+            renderArchivesArticles(q);
+        }
+
+        function filterPole(poleName) {
+            navigateTo('series');
+            document.getElementById('pole-filter').value = poleName;
+            renderSeriesList();
+        }
+
+        // MODAL D'ARTICLE DE LECTURE
+        function openArticleModal(id) {
+            const article = articles.find(a => a.id === id);
+            if (!article) return;
+
+            currentArticleIndex = articles.findIndex(a => a.id === id);
+
+            document.getElementById('modal-badge').innerText = article.series;
+            document.getElementById('modal-title').innerText = article.title;
+            document.getElementById('modal-meta').innerText = `${article.date} • ${article.pole} • ${article.quarter}`;
+            document.getElementById('modal-content').innerHTML = article.content;
+
+            document.getElementById('article-modal').classList.remove('hidden');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeArticleModal() {
+            document.getElementById('article-modal').classList.add('hidden');
+            document.body.style.overflow = 'auto';
+        }
+
+        function navigateArticle(direction) {
+            let newIndex = currentArticleIndex + direction;
+            if (newIndex >= 0 && newIndex < articles.length) {
+                openArticleModal(articles[newIndex].id);
+            }
+        }
+
+        // INITIALISATION AU CHARGEMENT DE LA PAGE
+        window.onload = function() {
+            renderLatestArticles();
+            renderSeriesList();
+            renderArchivesArticles();
+        };
+    </script>
+</body>
+</html>
