@@ -6,6 +6,8 @@
     <title>Plateforme Éditoriale Spirituelle Unifiée</title>
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Supabase JS Client CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <!-- FontAwesome Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <!-- Google Fonts -->
@@ -55,19 +57,28 @@
                     </div>
                     <div>
                         <h1 class="title-font font-bold text-lg sm:text-xl tracking-wider text-sand-50">ÉDITIONS SPIRITUELLES</h1>
-                        <p class="text-xs text-sand-300 font-light tracking-widest uppercase">Plateforme Unifiée - 10 Blogs[cite: 1]</p>
+                        <p class="text-xs text-sand-300 font-light tracking-widest uppercase">Plateforme Éditoriale Unifiée</p>
                     </div>
                 </div>
 
-                <nav class="hidden md:flex space-x-6 lg:space-x-8 font-medium text-sm">
+                <nav class="hidden md:flex items-center space-x-6 lg:space-x-8 font-medium text-sm">
                     <button onclick="navigateTo('home')" id="nav-home" class="nav-btn text-gold-500 hover:text-gold-500 py-2 border-b-2 border-gold-500 transition-all">Accueil</button>
                     <button onclick="navigateTo('series')" id="nav-series" class="nav-btn text-sand-300 hover:text-sand-50 py-2 border-b-2 border-transparent transition-all">Thèmes & Séries</button>
                     <button onclick="navigateTo('archives')" id="nav-archives" class="nav-btn text-sand-300 hover:text-sand-50 py-2 border-b-2 border-transparent transition-all">Trimestres</button>
                     <button onclick="navigateTo('daily')" id="nav-daily" class="nav-btn text-sand-300 hover:text-sand-50 py-2 border-b-2 border-transparent transition-all">Publication du jour</button>
                     <button onclick="navigateTo('about')" id="nav-about" class="nav-btn text-sand-300 hover:text-sand-50 py-2 border-b-2 border-transparent transition-all">À propos</button>
+                    
+                    <button onclick="openSubmitModal()" class="bg-gold-500 hover:bg-gold-600 text-navy-950 px-4 py-2 rounded-lg font-bold text-xs transition-all flex items-center space-x-2 shadow-md hover:shadow-lg">
+                        <i class="fa-solid fa-pen-nib"></i>
+                        <span>Proposer un article</span>
+                    </button>
                 </nav>
 
-                <div class="md:hidden flex items-center">
+                <div class="md:hidden flex items-center space-x-3">
+                    <button onclick="openSubmitModal()" class="bg-gold-500 text-navy-950 px-3 py-1.5 rounded-lg font-bold text-xs flex items-center space-x-1">
+                        <i class="fa-solid fa-pen-nib"></i>
+                        <span>Publier</span>
+                    </button>
                     <button id="mobile-menu-btn" onclick="toggleMobileMenu()" class="text-sand-200 hover:text-sand-50 focus:outline-none p-2">
                         <i class="fa-solid fa-bars text-2xl"></i>
                     </button>
@@ -86,7 +97,7 @@
 
     <!-- BARRE DE SYNCHRONISATION -->
     <div id="sync-status" class="bg-navy-800 text-gold-500 text-xs py-2 px-4 text-center font-medium border-b border-navy-900">
-        <i class="fas fa-sync-alt fa-spin mr-2"></i> Connexion et synchronisation en direct avec les flux des 10 blogs Blogger...[cite: 1]
+        <i class="fas fa-sync-alt fa-spin mr-2"></i> Synchronisation en direct des publications...
     </div>
 
     <!-- MAIN CONTENT AREA -->
@@ -112,10 +123,6 @@
                             <span>Lire sur la plateforme</span>
                             <i class="fa-solid fa-arrow-right text-xs"></i>
                         </button>
-                        <a id="hero-original-link" href="#" class="bg-navy-950 hover:bg-navy-950/80 text-sand-200 border border-navy-700 text-xs font-semibold px-4 py-3 rounded-lg transition-all flex items-center space-x-2">
-                            <i class="fa-solid fa-external-link-alt text-gold-500"></i>
-                            <span>Ouvrir sur le blog original</span>
-                        </a>
                     </div>
                 </div>
             </section>
@@ -124,7 +131,7 @@
             <section class="grid grid-cols-2 sm:grid-cols-4 gap-4 bg-white p-6 rounded-xl shadow-sm border border-sand-200 text-center">
                 <div class="p-3">
                     <p class="text-2xl sm:text-3xl font-bold text-navy-900 title-font">10</p>
-                    <p class="text-xs text-slate-500 uppercase tracking-wider mt-1">Blogs Rassemblés[cite: 1]</p>
+                    <p class="text-xs text-slate-500 uppercase tracking-wider mt-1">Séries Intégrées</p>
                 </div>
                 <div class="p-3 border-l border-sand-200">
                     <p class="text-2xl sm:text-3xl font-bold text-navy-900 title-font">4</p>
@@ -132,7 +139,7 @@
                 </div>
                 <div class="p-3 sm:border-l border-sand-200">
                     <p id="stat-total-articles" class="text-2xl sm:text-3xl font-bold text-navy-900 title-font">--</p>
-                    <p class="text-xs text-slate-500 uppercase tracking-wider mt-1">Articles en direct</p>
+                    <p class="text-xs text-slate-500 uppercase tracking-wider mt-1">Articles disponibles</p>
                 </div>
                 <div class="p-3 border-l border-sand-200">
                     <p class="text-2xl sm:text-3xl font-bold text-navy-900 title-font">4</p>
@@ -160,7 +167,7 @@
                             <h4 class="title-font font-bold text-lg text-navy-900 mb-2">Ancien Testament</h4>
                             <p class="text-xs text-slate-600 mb-4">Études de récits fondamentaux, conquêtes et fondements de la foi.</p>
                         </div>
-                        <button onclick="filterPole('Ancien Testament')" class="mt-6 w-full text-center py-2 bg-sand-100 hover:bg-sand-200 text-navy-900 rounded-lg text-xs font-semibold transition-all">Explorer le Pôle</button>
+                        <button onclick="filterPole('Ancien Testament')" class="mt-6 bg-gold-500 hover:bg-gold-600 text-white px-6 py-3 rounded-lg shadow-md transition-all flex items-center justify-center space-x-2 w-full text-center text-xs font-semibold"><span>Explorer le Pôle</span></button>
                     </div>
                     <div class="bg-white rounded-xl shadow-sm border border-sand-200 p-6 flex flex-col justify-between">
                         <div>
@@ -168,7 +175,7 @@
                             <h4 class="title-font font-bold text-lg text-navy-900 mb-2">Nouveau Testament</h4>
                             <p class="text-xs text-slate-600 mb-4">Évangiles et épîtres pour l'enseignement des communautés.</p>
                         </div>
-                        <button onclick="filterPole('Nouveau Testament')" class="mt-6 w-full text-center py-2 bg-sand-100 hover:bg-sand-200 text-navy-900 rounded-lg text-xs font-semibold transition-all">Explorer le Pôle</button>
+                        <button onclick="filterPole('Nouveau Testament')" class="mt-6 bg-gold-500 hover:bg-gold-600 text-white px-6 py-3 rounded-lg shadow-md transition-all flex items-center justify-center space-x-2 w-full text-center text-xs font-semibold"><span>Explorer le Pôle</span></button>
                     </div>
                     <div class="bg-white rounded-xl shadow-sm border border-sand-200 p-6 flex flex-col justify-between">
                         <div>
@@ -176,7 +183,7 @@
                             <h4 class="title-font font-bold text-lg text-navy-900 mb-2">Vie & Théologie</h4>
                             <p class="text-xs text-slate-600 mb-4">Réflexions théologiques sur l'amour, la justice et la croissance.</p>
                         </div>
-                        <button onclick="filterPole('Vie & Théologie Spirituelle')" class="mt-6 w-full text-center py-2 bg-sand-100 hover:bg-sand-200 text-navy-900 rounded-lg text-xs font-semibold transition-all">Explorer le Pôle</button>
+                        <button onclick="filterPole('Vie & Théologie Spirituelle')" class="mt-6 bg-gold-500 hover:bg-gold-600 text-white px-6 py-3 rounded-lg shadow-md transition-all flex items-center justify-center space-x-2 w-full text-center text-xs font-semibold"><span>Explorer le Pôle</span></button>
                     </div>
                     <div class="bg-white rounded-xl shadow-sm border border-sand-200 p-6 flex flex-col justify-between">
                         <div>
@@ -184,7 +191,7 @@
                             <h4 class="title-font font-bold text-lg text-navy-900 mb-2">Symbolisme & Unité</h4>
                             <p class="text-xs text-slate-600 mb-4">Explication des métaphores spirituelles et dimension cosmique.</p>
                         </div>
-                        <button onclick="filterPole('Symbolisme & Unité')" class="mt-6 w-full text-center py-2 bg-sand-100 hover:bg-sand-200 text-navy-900 rounded-lg text-xs font-semibold transition-all">Explorer le Pôle</button>
+                        <button onclick="filterPole('Symbolisme & Unité')" class="mt-6 bg-gold-500 hover:bg-gold-600 text-white px-6 py-3 rounded-lg shadow-md transition-all flex items-center justify-center space-x-2 w-full text-center text-xs font-semibold"><span>Explorer le Pôle</span></button>
                     </div>
                 </div>
             </section>
@@ -199,7 +206,7 @@
         <!-- SECTION: THÈMES & SÉRIES -->
         <div id="view-series" class="hidden space-y-8">
             <div class="bg-white p-6 rounded-xl border border-sand-200 shadow-sm space-y-4">
-                <h2 class="title-font text-3xl font-bold text-navy-900">Répertoire des 10 Blogs & Séries Éditoriales</h2>
+                <h2 class="title-font text-3xl font-bold text-navy-900">Répertoire des Séries Éditoriales</h2>
                 <div class="flex flex-col sm:flex-row gap-4 pt-2">
                     <div class="relative flex-grow">
                         <i class="fa-solid fa-magnifying-glass absolute left-3 top-3.5 text-slate-400"></i>
@@ -244,30 +251,57 @@
                     </div>
                 </div>
                 <div id="daily-content" class="article-body-font text-slate-800 leading-relaxed text-lg space-y-4">Chargement...</div>
-                <div class="bg-sand-50 p-4 rounded-lg border border-sand-300 text-xs text-slate-600 flex justify-between items-center">
-                    <div>
-                        <p class="font-semibold text-navy-900">Origine du contenu :</p>
-                        <p>Synchronisé via le flux RSS unifié.</p>
-                    </div>
-                    <a id="daily-original-link" href="#" class="px-4 py-2 bg-navy-900 text-sand-50 rounded-lg font-semibold text-xs hover:bg-gold-500 hover:text-navy-950 transition-all">Ouvrir le blog original <i class="fa-solid fa-external-link-alt ml-1"></i></a>
-                </div>
             </div>
         </div>
 
-        <!-- SECTION: À PROPOS -->
+        <!-- SECTION: À PROPOS (MIS À JOUR & DÉTAILLÉ) -->
         <div id="view-about" class="hidden space-y-8">
-            <div class="bg-white p-8 rounded-xl border border-sand-200 shadow-sm max-w-4xl mx-auto space-y-6">
-                <h2 class="title-font text-3xl font-bold text-navy-900 border-b border-sand-200 pb-4">À propos de la Plateforme Éditoriale Unifiée</h2>
-                <div class="space-y-4 text-slate-700 leading-relaxed">
-                    <p>Plateforme centrale rassemblant 10 blogs spirituels et théologiques distincts[cite: 1].</p>
-                    <h3 class="title-font font-bold text-xl text-navy-900 pt-2">Les 10 Blogs Regroupés</h3>
-                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-2 text-xs" id="about-blogs-grid"></div>
+            <div class="bg-white p-8 sm:p-12 rounded-2xl border border-sand-200 shadow-sm max-w-4xl mx-auto space-y-8">
+                <div class="border-b border-sand-200 pb-6">
+                    <span class="bg-gold-500 text-navy-950 text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wider">Maison d'Édition & Recherche</span>
+                    <h2 class="title-font text-3xl sm:text-4xl font-bold text-navy-900 mt-3">À propos de la Plateforme Éditoriale</h2>
+                    <p class="text-sm text-slate-600 mt-2">Un espace unifié dédié à la diffusion et à la centralisation des études spirituelles et théologiques approfondies.</p>
+                </div>
+
+                <div class="space-y-6 text-slate-700 leading-relaxed text-base article-body-font">
+                    <p>
+                        Bienvenue sur notre plateforme éditoriale unifiée. Conçue comme un carrefour de réflexion et de partage, elle rassemble sous une interface fluide et moderne l'ensemble des publications de nos dix séries thématiques de référence.
+                    </p>
+
+                    <div class="bg-sand-50 p-6 rounded-xl border border-sand-200 space-y-3">
+                        <h3 class="title-font font-bold text-xl text-navy-900 flex items-center gap-2">
+                            <i class="fa-solid fa-bullseye text-gold-600"></i> Notre Objectif
+                        </h3>
+                        <p class="text-sm text-slate-600 font-sans">
+                            Notre mission est de rendre accessible, structurée et agréable la lecture des textes fondateurs, des commentaires scripturaires et des réflexions théologiques à travers quatre grands pôles majeurs : l'Ancien Testament, le Nouveau Testament, la Vie & Théologie Spirituelle, ainsi que le Symbolisme & l'Unité.
+                        </p>
+                    </div>
+
+                    <h3 class="title-font font-bold text-2xl text-navy-900 pt-4">Une Expérience de Lecture Centralisée</h3>
+                    <p>
+                        Pour offrir un confort optimal à nos lecteurs, la plateforme intègre directement l'intégralité des articles et des études au sein d'un environnement unifié. Faisant office de bibliothèque numérique intelligente, le site synchronise automatiquement les publications et permet également à des contributeurs externes de soumettre des articles soumis à une modération rigoureuse.
+                    </p>
+
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-4">
+                        <div class="p-5 bg-navy-900 text-sand-50 rounded-xl space-y-2">
+                            <div class="text-gold-500 font-bold text-lg"><i class="fa-solid fa-layer-group mr-2"></i> 10 Séries Clés</div>
+                            <p class="text-xs text-sand-300">Des thématiques variées couvrant l'exégèse, l'histoire sainte et la marche spirituelle quotidienne.</p>
+                        </div>
+                        <div class="p-5 bg-navy-900 text-sand-50 rounded-xl space-y-2">
+                            <div class="text-gold-500 font-bold text-lg"><i class="fa-solid fa-calendar-days mr-2"></i> Classement Trimestriel</div>
+                            <p class="text-xs text-sand-300">Une organisation rigoureuse par trimestre (T1 à T4) pour faciliter l'étude suivie tout au long de l'année.</p>
+                        </div>
+                    </div>
+
+                    <p class="pt-2 text-sm text-slate-500 italic">
+                        Que vous cherchiez à approfondir votre connaissance des Écritures ou à découvrir de nouvelles perspectives théologiques, cette plateforme vous offre un accès direct, un pôle de recherche unifié et un cadre propice à la méditation.
+                    </p>
                 </div>
             </div>
         </div>
     </main>
 
-    <!-- MODAL LECTURE -->
+    <!-- MODAL LECTURE D'ARTICLE -->
     <div id="article-modal" class="fixed inset-0 z-50 hidden bg-navy-950/80 backdrop-blur-sm flex items-center justify-center p-4 sm:p-6 overflow-y-auto">
         <div class="bg-white rounded-2xl max-w-3xl w-full max-h-[90vh] overflow-y-auto shadow-2xl border border-sand-300 relative flex flex-col justify-between">
             <div class="p-6 border-b border-sand-200 flex justify-between items-start sticky top-0 bg-white z-10">
@@ -285,22 +319,95 @@
                     <span class="text-slate-300">|</span>
                     <button onclick="navigateArticle(1)" class="text-xs font-semibold text-navy-900 hover:text-gold-600">Suivant <i class="fa-solid fa-arrow-right"></i></button>
                 </div>
-                <a id="modal-original-link" href="#" class="bg-navy-900 text-sand-50 hover:bg-gold-500 hover:text-navy-950 text-xs font-bold px-4 py-2 rounded-lg transition-all flex items-center space-x-2">
-                    <i class="fa-solid fa-external-link-alt"></i><span>Ouvrir l'article original</span>
-                </a>
             </div>
+        </div>
+    </div>
+
+    <!-- MODAL SOUMISSION / PUBLICATION D'ARTICLE -->
+    <div id="submit-article-modal" class="fixed inset-0 z-50 hidden bg-navy-950/80 backdrop-blur-sm flex items-center justify-center p-4 sm:p-6 overflow-y-auto">
+        <div class="bg-white rounded-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto shadow-2xl border border-sand-300 relative flex flex-col justify-between">
+            <div class="p-6 border-b border-sand-200 flex justify-between items-center sticky top-0 bg-white z-10">
+                <div class="flex items-center space-x-3">
+                    <div class="w-8 h-8 rounded-full bg-gold-500 text-navy-950 flex items-center justify-center font-bold text-sm">
+                        <i class="fa-solid fa-feather-pointed"></i>
+                    </div>
+                    <div>
+                        <h3 class="title-font text-xl font-bold text-navy-900">Proposer une contribution</h3>
+                        <p class="text-xs text-slate-500">Soumettre un texte pour validation avant publication</p>
+                    </div>
+                </div>
+                <button onclick="closeSubmitModal()" class="text-slate-400 hover:text-navy-900 text-2xl p-2"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+
+            <form id="submission-form" onsubmit="handleArticleSubmit(event)" class="p-6 space-y-4">
+                <div>
+                    <label class="block text-xs font-semibold text-navy-900 uppercase tracking-wider mb-1">Titre de l'article *</label>
+                    <input type="text" id="submit-title" required placeholder="Ex: Réflexions sur la grâce et la fidélité" class="w-full px-4 py-2.5 rounded-lg border border-sand-300 focus:outline-none focus:border-gold-500 text-sm">
+                </div>
+
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-xs font-semibold text-navy-900 uppercase tracking-wider mb-1">Nom de l'auteur / Contributeur *</label>
+                        <input type="text" id="submit-author" required placeholder="Ex: Jean Dupont" class="w-full px-4 py-2.5 rounded-lg border border-sand-300 focus:outline-none focus:border-gold-500 text-sm">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-semibold text-navy-900 uppercase tracking-wider mb-1">Pôle Éditorial *</label>
+                        <select id="submit-pole" required class="w-full px-4 py-2.5 rounded-lg border border-sand-300 focus:outline-none focus:border-gold-500 text-sm bg-white">
+                            <option value="Ancien Testament">Ancien Testament</option>
+                            <option value="Nouveau Testament">Nouveau Testament</option>
+                            <option value="Vie & Théologie Spirituelle" selected>Vie & Théologie Spirituelle</option>
+                            <option value="Symbolisme & Unité">Symbolisme & Unité</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-xs font-semibold text-navy-900 uppercase tracking-wider mb-1">Trimestre associé *</label>
+                        <select id="submit-quarter" required class="w-full px-4 py-2.5 rounded-lg border border-sand-300 focus:outline-none focus:border-gold-500 text-sm bg-white">
+                            <option value="T1">Trimestre 1 (T1)</option>
+                            <option value="T2">Trimestre 2 (T2)</option>
+                            <option value="T3">Trimestre 3 (T3)</option>
+                            <option value="T4" selected>Trimestre 4 (T4)</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div>
+                    <label class="block text-xs font-semibold text-navy-900 uppercase tracking-wider mb-1">Contenu de l'article *</label>
+                    <textarea id="submit-content" required rows="6" placeholder="Rédigez ou collez le texte complet de votre article ici..." class="w-full px-4 py-2.5 rounded-lg border border-sand-300 focus:outline-none focus:border-gold-500 text-sm article-body-font leading-relaxed"></textarea>
+                </div>
+
+                <div id="submit-feedback" class="hidden p-3 rounded-lg text-xs font-medium"></div>
+
+                <div class="pt-4 border-t border-sand-200 flex justify-end space-x-3">
+                    <button type="button" onclick="closeSubmitModal()" class="px-4 py-2 rounded-lg text-xs font-semibold text-slate-600 hover:bg-sand-200 transition-all">Annuler</button>
+                    <button type="submit" class="px-6 py-2 bg-gold-500 hover:bg-gold-600 text-navy-950 rounded-lg text-xs font-bold transition-all shadow-md flex items-center space-x-2">
+                        <i class="fa-solid fa-paper-plane"></i>
+                        <span>Soumettre pour modération</span>
+                    </button>
+                </div>
+            </form>
         </div>
     </div>
 
     <!-- FOOTER -->
     <footer class="bg-navy-950 text-sand-200 py-12 border-t border-navy-800">
         <div class="max-w-7xl mx-auto px-4 text-center space-y-2">
-            <p class="text-xs text-sand-300">Unification & Archiving of 10 Spiritual Blogger Sites © 2026</p>
+            <p class="text-xs text-sand-300">Plateforme Éditoriale Unifiée © 2026</p>
         </div>
     </footer>
 
-    <!-- SCRIPT DE SYNCHRONISATION, CHARGEMENT ET DISTRIBUTION PAR TRIMESTRE -->
+    <!-- SCRIPT CONFIGURATION SUPABASE, SYNCHRONISATION & LOGIQUE JS -->
     <script>
+        const SUPABASE_URL = "https://vefxpabarluloocncelm.supabase.co";
+        const SUPABASE_ANON_KEY = "sb_publishable_kWjL90IZ2MOBuZr758QJ_w_G6lPsb7x";
+        let supabaseClient = null;
+
+        if (SUPABASE_URL !== "" && typeof supabase !== 'undefined') {
+            supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+        }
+
         const BLOGS_CONFIG = [
             { id: "lessonsfoilivrejosue", name: "Leçons sur le livre de Josué", url: "https://lessonsfoilivrejosue.blogspot.com", pole: "Ancien Testament" },
             { id: "exodeverslaterrepromise", name: "L'Exode vers la terre promise", url: "https://exodeverslaterrepromise.blogspot.com", pole: "Ancien Testament" },
@@ -317,7 +424,6 @@
         let ARTICLES = [];
         let currentArticleIndex = 0;
 
-        // Gestion du Loader et des liens dynamiques dans le même onglet
         document.addEventListener('DOMContentLoaded', () => {
             const loader = document.getElementById('page-loader');
 
@@ -327,13 +433,6 @@
                 setTimeout(() => loader.classList.add('opacity-100'), 10);
             }
 
-            function hideLoader() {
-                if (!loader) return;
-                loader.classList.remove('opacity-100');
-                setTimeout(() => loader.classList.add('hidden'), 300);
-            }
-
-            // Forcer les liens à s'ouvrir dans le même onglet et déclencher le loader
             document.querySelectorAll('a').forEach(link => {
                 link.setAttribute('target', '_self');
                 link.addEventListener('click', function(e) {
@@ -347,23 +446,24 @@
             fetchAllBloggerFeeds();
         });
 
-        async function fetchAllBloggerFeeds() {
-            const statusDiv = document.getElementById('sync-status');
-            let loadedCount = 0;
+        function fetchBloggerFeedJSONP(blog) {
+            return new Promise((resolve) => {
+                const callbackName = 'cb_' + Math.random().toString(36).substring(2, 9);
+                const script = document.createElement('script');
+                
+                const timer = setTimeout(() => {
+                    delete window[callbackName];
+                    if (script.parentNode) script.parentNode.removeChild(script);
+                    resolve([]);
+                }, 4000);
 
-            const fetchPromises = BLOGS_CONFIG.map(async (blog) => {
-                try {
-                    const feedUrl = `${blog.url}/feeds/posts/default?alt=json&max-results=5`;
-                    const proxyUrl = `https://api.allorigins.win/get?url=${encodeURIComponent(feedUrl)}`;
-                    
-                    const response = await fetch(proxyUrl);
-                    if (!response.ok) throw new Error("Erreur réseau");
-                    
-                    const wrapperData = await response.json();
-                    const data = JSON.parse(wrapperData.contents);
-                    const entries = data.feed.entry || [];
-                    
-                    return entries.map((entry, entryIndex) => {
+                window[callbackName] = function(data) {
+                    clearTimeout(timer);
+                    delete window[callbackName];
+                    if (script.parentNode) script.parentNode.removeChild(script);
+
+                    const entries = (data && data.feed && data.feed.entry) ? data.feed.entry : [];
+                    const articles = entries.map((entry, entryIndex) => {
                         const publishedDate = new Date(entry.published.$t);
                         
                         let trimester = "T4";
@@ -376,7 +476,7 @@
                         const tempDiv = document.createElement("div");
                         tempDiv.innerHTML = contentHtml;
                         const plainText = tempDiv.textContent || tempDiv.innerText || "";
-                        const linkObj = entry.link.find(l => l.rel === 'alternate');
+                        const linkObj = entry.link ? entry.link.find(l => l.rel === 'alternate') : null;
 
                         return {
                             title: entry.title.$t,
@@ -391,23 +491,76 @@
                             originalUrl: linkObj ? linkObj.href : blog.url
                         };
                     });
-                } catch (err) {
-                    return [];
-                } finally {
-                    loadedCount++;
-                    statusDiv.innerHTML = `<i class="fas fa-sync-alt fa-spin mr-2"></i> Synchronisation : ${loadedCount} / 10 blogs analysés...`;
+                    resolve(articles);
+                };
+
+                script.src = `${blog.url}/feeds/posts/default?alt=json-in-script&callback=${callbackName}&max-results=5`;
+                script.onerror = () => {
+                    clearTimeout(timer);
+                    delete window[callbackName];
+                    if (script.parentNode) script.parentNode.removeChild(script);
+                    resolve([]);
+                };
+
+                document.head.appendChild(script);
+            });
+        }
+
+        async function fetchAllBloggerFeeds() {
+            const statusDiv = document.getElementById('sync-status');
+            let loadedCount = 0;
+
+            const fetchPromises = BLOGS_CONFIG.map(async (blog) => {
+                const articles = await fetchBloggerFeedJSONP(blog);
+                loadedCount++;
+                if (statusDiv) {
+                    statusDiv.innerHTML = `<i class="fas fa-sync-alt fa-spin mr-2"></i> Synchronisation : ${loadedCount} / 10 séries analysées...`;
                 }
+                return articles;
             });
 
             const results = await Promise.all(fetchPromises);
-            ARTICLES = results.flat().sort((a, b) => b.rawDate - a.rawDate);
+            let bloggerArticles = results.flat();
+
+            let supabaseArticles = [];
+            if (supabaseClient) {
+                try {
+                    const { data, error } = await supabaseClient
+                        .from('articles')
+                        .select('*')
+                        .eq('status', 'approuve');
+
+                    if (error) {
+                        console.error("Erreur requête Supabase :", error);
+                    } else if (data) {
+                        supabaseArticles = data.map(item => ({
+                            title: item.title,
+                            blogName: `Contribution (${item.author})`,
+                            blogUrl: "#",
+                            pole: item.pole,
+                            date: new Date(item.created_at).toLocaleDateString('fr-FR', { day: 'numeric', month: 'long', year: 'numeric' }),
+                            rawDate: new Date(item.created_at),
+                            quarter: item.quarter,
+                            summary: item.content.substring(0, 160) + "...",
+                            content: `<p class="font-semibold text-navy-900 mb-2">Rédigé par ${item.author} :</p>` + item.content,
+                            originalUrl: "#"
+                        }));
+                    }
+                } catch (err) {
+                    console.error("Erreur de connexion Supabase :", err);
+                }
+            }
+
+            ARTICLES = [...supabaseArticles, ...bloggerArticles].sort((a, b) => b.rawDate - a.rawDate);
 
             if (ARTICLES.length === 0) {
                 loadFallbackArticles();
             } else {
-                statusDiv.className = "bg-emerald-800 text-emerald-100 text-xs py-2 px-4 text-center font-medium";
-                statusDiv.innerHTML = `<i class="fas fa-check-circle mr-2"></i> Synchronisation réussie ! ${ARTICLES.length} articles répartis sur les trimestres.`;
-                setTimeout(() => { statusDiv.style.display = 'none'; }, 4000);
+                if (statusDiv) {
+                    statusDiv.className = "bg-emerald-800 text-emerald-100 text-xs py-2 px-4 text-center font-medium";
+                    statusDiv.innerHTML = `<i class="fas fa-check-circle mr-2"></i> Synchronisation réussie ! ${ARTICLES.length} articles disponibles.`;
+                    setTimeout(() => { statusDiv.style.display = 'none'; }, 4000);
+                }
             }
 
             renderAllViews();
@@ -423,8 +576,8 @@
                 date: "15 Mai 2026",
                 rawDate: new Date(),
                 quarter: quarters[i % 4],
-                summary: `Aperçu de la publication issue du blog ${b.name}...`,
-                content: `<p>Contenu issu du blog partenaire <strong>${b.name}</strong> (${b.url}).</p>`,
+                summary: `Aperçu de la publication...`,
+                content: `<p>Contenu principal de la série <strong>${b.name}</strong>.</p>`,
                 originalUrl: b.url
             }));
             renderAllViews();
@@ -436,44 +589,40 @@
 
             const hero = ARTICLES[0];
             document.getElementById('hero-badge').innerHTML = `<i class="fa-solid fa-sun mr-1"></i> ${hero.pole}`;
-            document.getElementById('hero-date').innerHTML = `<i class="fa-regular fa-calendar mr-1"></i> ${hero.date}`;
+            document.getElementById('hero-date').innerHTML = `<i class="fa-regular fa-calendar mr-1"></i> Publié le ${hero.date}`;
             document.getElementById('hero-quarter').innerText = `Trimestre ${hero.quarter} - 2026`;
             document.getElementById('hero-title').innerText = hero.title;
             document.getElementById('hero-summary').innerText = hero.summary;
-            document.getElementById('hero-original-link').href = hero.originalUrl;
-            document.getElementById('hero-original-link').setAttribute('target', '_self');
 
             const latestGrid = document.getElementById('latest-articles-grid');
             latestGrid.innerHTML = ARTICLES.slice(0, 6).map((art, idx) => `
                 <div class="bg-white rounded-xl shadow-sm border border-sand-200 hover:shadow-md transition-all p-6 flex flex-col justify-between">
                     <div class="space-y-3">
-                        <div class="flex justify-between items-center text-xs">
-                            <span class="bg-sand-200 text-navy-900 px-2.5 py-0.5 rounded-full font-semibold">${art.pole}</span>
-                            <span class="text-gold-600 font-bold font-mono">${art.quarter}</span>
+                        <div class="flex justify-between items-center text-xs pb-1 border-b border-sand-100">
+                            <span class="text-slate-500 font-medium flex items-center gap-1">
+                                <i class="fa-regular fa-calendar text-gold-600"></i> ${art.date}
+                            </span>
+                            <span class="bg-sand-200 text-navy-900 px-2.5 py-0.5 rounded-full font-semibold text-xxs">${art.pole}</span>
                         </div>
-                        <h4 class="title-font font-bold text-lg text-navy-900 leading-snug cursor-pointer hover:text-gold-600" onclick="openArticleModal(${idx})">${art.title}</h4>
+
+                        <h4 class="title-font font-bold text-lg text-navy-900 leading-snug cursor-pointer hover:text-gold-600 pt-1" onclick="openArticleModal(${idx})">${art.title}</h4>
                         <p class="text-xs text-slate-600 line-clamp-3">${art.summary}</p>
                     </div>
                     <div class="pt-4 border-t border-sand-100 flex flex-wrap justify-between items-center gap-2 text-xs mt-4">
                         <button onclick="openArticleModal(${idx})" class="font-semibold text-navy-900 hover:text-gold-600 flex items-center space-x-1">
                             <span>Lire</span><i class="fa-solid fa-chevron-right text-xxs"></i>
                         </button>
-                        <a href="${art.originalUrl}" target="_self" class="text-gold-600 hover:text-gold-500 font-medium flex items-center space-x-1 bg-amber-50 px-2.5 py-1 rounded border border-amber-200">
-                            <i class="fa-solid fa-external-link-alt text-xxs"></i><span>Blog original</span>
-                        </a>
+                        <span class="text-gold-600 font-bold font-mono text-xs">${art.quarter}</span>
                     </div>
                 </div>
             `).join('');
 
             document.getElementById('daily-title').innerText = hero.title;
-            document.getElementById('daily-meta').innerText = `${hero.date} • ${hero.blogName} • ${hero.pole}`;
+            document.getElementById('daily-meta').innerText = `Publié le ${hero.date} • ${hero.pole}`;
             document.getElementById('daily-content').innerHTML = hero.content;
-            document.getElementById('daily-original-link').href = hero.originalUrl;
-            document.getElementById('daily-original-link').setAttribute('target', '_self');
 
             renderSeriesList();
             renderArchivesArticles('all');
-            renderAboutBlogs();
         }
 
         function renderSeriesList() {
@@ -482,7 +631,7 @@
             const container = document.getElementById('series-container');
 
             const filtered = BLOGS_CONFIG.filter(b => {
-                const matchesSearch = b.name.toLowerCase().includes(searchVal) || b.url.toLowerCase().includes(searchVal);
+                const matchesSearch = b.name.toLowerCase().includes(searchVal);
                 const matchesPole = poleVal === 'all' || b.pole === poleVal;
                 return matchesSearch && matchesPole;
             });
@@ -492,13 +641,9 @@
                     <div>
                         <span class="text-xs bg-navy-900 text-sand-100 px-2.5 py-1 rounded-full font-semibold">${b.pole}</span>
                         <h4 class="title-font font-bold text-xl text-navy-900 mt-3">${b.name}</h4>
-                        <p class="text-xs text-slate-500 mt-1 font-mono">${b.url}</p>
                     </div>
                     <div class="pt-4 mt-4 border-t border-sand-100 flex justify-between items-center">
-                        <a href="${b.url}" target="_self" class="text-xs text-gold-600 hover:text-gold-500 flex items-center space-x-1 font-semibold">
-                            <span>Ouvrir Blogger</span><i class="fa-solid fa-external-link-alt text-xxs"></i>
-                        </a>
-                        <button onclick="navigateTo('archives')" class="text-xs bg-sand-200 hover:bg-sand-300 text-navy-900 px-3 py-1.5 rounded font-semibold">Voir Trimestres</button>
+                        <button onclick="navigateTo('archives')" class="text-xs bg-sand-200 hover:bg-sand-300 text-navy-900 px-3 py-1.5 rounded font-semibold">Voir les articles</button>
                     </div>
                 </div>
             `).join('');
@@ -518,15 +663,18 @@
                 return `
                 <div class="bg-white rounded-xl shadow-sm border border-sand-200 p-6 flex flex-col justify-between">
                     <div class="space-y-3">
-                        <span class="bg-navy-950 text-sand-50 text-xs px-2.5 py-1 rounded-full font-mono">${art.quarter} • ${art.date}</span>
-                        <h4 class="title-font font-bold text-lg text-navy-900 cursor-pointer hover:text-gold-600" onclick="openArticleModal(${realIndex})">${art.title}</h4>
+                        <div class="flex justify-between items-center text-xs pb-1 border-b border-sand-100">
+                            <span class="text-slate-500 font-medium flex items-center gap-1">
+                                <i class="fa-regular fa-calendar text-gold-600"></i> ${art.date}
+                            </span>
+                            <span class="bg-navy-950 text-sand-50 text-xs px-2.5 py-0.5 rounded-full font-mono">${art.quarter}</span>
+                        </div>
+
+                        <h4 class="title-font font-bold text-lg text-navy-900 cursor-pointer hover:text-gold-600 pt-1" onclick="openArticleModal(${realIndex})">${art.title}</h4>
                         <p class="text-xs text-slate-600">${art.summary}</p>
                     </div>
                     <div class="pt-4 mt-4 border-t border-sand-100 flex flex-wrap justify-between items-center gap-2">
-                        <button onclick="openArticleModal(${realIndex})" class="text-xs font-bold text-navy-900 hover:text-gold-600">Lire</button>
-                        <a href="${art.originalUrl}" target="_self" class="text-xs text-gold-600 hover:text-gold-500 font-medium flex items-center space-x-1 bg-amber-50 px-2.5 py-1 rounded border border-amber-200">
-                            <i class="fa-solid fa-external-link-alt text-xxs"></i><span>Original</span>
-                        </a>
+                        <button onclick="openArticleModal(${realIndex})" class="text-xs font-bold text-navy-900 hover:text-gold-600">Lire l'article</button>
                     </div>
                 </div>
             `}).join('');
@@ -534,16 +682,6 @@
 
         function filterQuarter(q) { renderArchivesArticles(q); }
         function filterPole(poleName) { navigateTo('series'); document.getElementById('pole-filter').value = poleName; renderSeriesList(); }
-
-        function renderAboutBlogs() {
-            const container = document.getElementById('about-blogs-grid');
-            if(!container) return;
-            container.innerHTML = BLOGS_CONFIG.map((b, i) => `
-                <a href="${b.url}" target="_self" class="p-3 bg-sand-50 rounded border border-sand-200 hover:bg-sand-100 flex items-center justify-between">
-                    <span>${i+1}. ${b.name}</span><i class="fa-solid fa-arrow-up-right-from-square text-slate-400"></i>
-                </a>
-            `).join('');
-        }
 
         function navigateTo(viewName) {
             document.querySelectorAll('#main-content > div').forEach(div => div.classList.add('hidden'));
@@ -571,10 +709,8 @@
             currentArticleIndex = index;
             document.getElementById('modal-badge').innerText = article.pole;
             document.getElementById('modal-title').innerText = article.title;
-            document.getElementById('modal-meta').innerText = `${article.date} • Source : ${article.blogName} • Trimestre ${article.quarter}`;
+            document.getElementById('modal-meta').innerText = `Publié le ${article.date} • Trimestre ${article.quarter}`;
             document.getElementById('modal-content').innerHTML = article.content;
-            document.getElementById('modal-original-link').href = article.originalUrl;
-            document.getElementById('modal-original-link').setAttribute('target', '_self');
             document.getElementById('article-modal').classList.remove('hidden');
             document.body.style.overflow = 'hidden';
         }
@@ -587,6 +723,60 @@
         function navigateArticle(direction) {
             let newIndex = currentArticleIndex + direction;
             if (newIndex >= 0 && newIndex < ARTICLES.length) openArticleModal(newIndex);
+        }
+
+        function openSubmitModal() {
+            document.getElementById('submit-article-modal').classList.remove('hidden');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeSubmitModal() {
+            document.getElementById('submit-article-modal').classList.add('hidden');
+            document.body.style.overflow = 'auto';
+            const feedback = document.getElementById('submit-feedback');
+            if (feedback) feedback.classList.add('hidden');
+        }
+
+        async function handleArticleSubmit(e) {
+            e.preventDefault();
+            const feedback = document.getElementById('submit-feedback');
+
+            const title = document.getElementById('submit-title').value;
+            const author = document.getElementById('submit-author').value;
+            const pole = document.getElementById('submit-pole').value;
+            const quarter = document.getElementById('submit-quarter').value;
+            const content = document.getElementById('submit-content').value;
+
+            feedback.className = "p-3 rounded-lg text-xs font-medium bg-amber-100 text-amber-800 border border-amber-300 block";
+            feedback.innerHTML = `<i class="fa-solid fa-spinner fa-spin mr-2"></i> Envoi à la base de données en cours...`;
+
+            if (!supabaseClient) {
+                feedback.className = "p-3 rounded-lg text-xs font-medium bg-red-100 text-red-800 border border-red-300 block";
+                feedback.innerHTML = `<i class="fa-solid fa-circle-exclamation mr-2"></i> Configuration Supabase manquante.`;
+                return;
+            }
+
+            try {
+                const { data, error } = await supabaseClient
+                    .from('articles')
+                    .insert([
+                        { title, author, pole, quarter, content, status: 'en_attente' }
+                    ]);
+
+                if (error) throw error;
+
+                feedback.className = "p-3 rounded-lg text-xs font-medium bg-emerald-100 text-emerald-800 border border-emerald-300 block";
+                feedback.innerHTML = `<i class="fa-solid fa-circle-check mr-2"></i> Soumission réussie ! Votre article est en attente de modération.`;
+                document.getElementById('submission-form').reset();
+
+                setTimeout(() => {
+                    closeSubmitModal();
+                }, 3000);
+
+            } catch (err) {
+                feedback.className = "p-3 rounded-lg text-xs font-medium bg-red-100 text-red-800 border border-red-300 block";
+                feedback.innerHTML = `<i class="fa-solid fa-triangle-exclamation mr-2"></i> Erreur d'envoi : ${err.message}`;
+            }
         }
     </script>
 </body>
